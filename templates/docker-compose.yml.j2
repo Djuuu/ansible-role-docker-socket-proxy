@@ -1,0 +1,61 @@
+#jinja2: trim_blocks: True, lstrip_blocks: True
+# {{ ansible_managed }}
+# {{ template_fullpath | regex_replace('^' ~ role_path, role_path | basename) }}
+
+name: {{ docker_project_slug }}
+
+services:
+  socket-proxy:
+    image: lscr.io/linuxserver/socket-proxy:{{ docker_socket_proxy_version }}
+    container_name: socket-proxy
+    restart: unless-stopped
+    read_only: true
+    {% if docker_socket_proxy_network_mode == 'host' %}
+    network_mode: host
+    {% endif %}
+
+    {{ docker_project_compose_service_additional_options | indent(4) }}
+
+    environment:
+      - ALLOW_START={{ docker_socket_proxy_env_allow_start }}
+      - ALLOW_STOP={{ docker_socket_proxy_env_allow_stop }}
+      - ALLOW_RESTARTS={{ docker_socket_proxy_env_allow_restarts }}
+      - AUTH={{ docker_socket_proxy_env_auth }}
+      - BUILD={{ docker_socket_proxy_env_build }}
+      - COMMIT={{ docker_socket_proxy_env_commit }}
+      - CONFIGS={{ docker_socket_proxy_env_configs }}
+      - CONTAINERS={{ docker_socket_proxy_env_containers }}
+      - DISABLE_IPV6={{ docker_socket_proxy_env_disable_ipv6 }}
+      - DISTRIBUTION={{ docker_socket_proxy_env_distribution }}
+      - EVENTS={{ docker_socket_proxy_env_events }}
+      - EXEC={{ docker_socket_proxy_env_exec }}
+      - GRPC={{ docker_socket_proxy_env_grpc }}
+      - IMAGES={{ docker_socket_proxy_env_images }}
+      - INFO={{ docker_socket_proxy_env_info }}
+      - LOG_LEVEL={{ docker_socket_proxy_env_log_level }}
+      - NETWORKS={{ docker_socket_proxy_env_networks }}
+      - NODES={{ docker_socket_proxy_env_nodes }}
+      - PING={{ docker_socket_proxy_env_ping }}
+      - PLUGINS={{ docker_socket_proxy_env_plugins }}
+      - POST={{ docker_socket_proxy_env_post }}
+      - SECRETS={{ docker_socket_proxy_env_secrets }}
+      - SERVICES={{ docker_socket_proxy_env_services }}
+      - SESSION={{ docker_socket_proxy_env_session }}
+      - SWARM={{ docker_socket_proxy_env_swarm }}
+      - SYSTEM={{ docker_socket_proxy_env_system }}
+      - TASKS={{ docker_socket_proxy_env_tasks }}
+      - VERSION={{ docker_socket_proxy_env_version }}
+      - VOLUMES={{ docker_socket_proxy_env_volumes }}
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+    tmpfs:
+      - /run
+
+{% if docker_socket_proxy_network_mode != 'host' %}
+networks:
+  {{ docker_project_default_network | indent(2) }}
+{% endif %}
+
+{{ docker_project_compose_additional_options }}
