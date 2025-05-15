@@ -33,7 +33,7 @@ Available role variables are listed below, along with default values (see `defau
 docker_socket_proxy_project_name: docker-socket-proxy
 
 # Docker socket proxy service additional docker-compose options (ex: cpu_shares, deploy, ...)
-docker_socket_proxy_compose_service_additional_options: |
+docker_socket_proxy_service_additional_options: |
   #ports:
   #  - "2375:2375"
 
@@ -42,9 +42,6 @@ docker_socket_proxy_compose_service_additional_options: |
 
 # lscr.io/linuxserver/socket-proxy image version
 docker_socket_proxy_version: latest
-
-# Docker socket proxy network mode (bridge|host)
-docker_socket_proxy_network_mode: bridge
 ```
 
 Environment / access configuration.  
