@@ -52,6 +52,11 @@ services:
     tmpfs:
       - /run
 
+    {% if docker_project_service_additional_labels %}
+    labels:
+      {{ docker_project_service_additional_labels | indent(6) }}
+    {% endif %}
+
 {{ docker_project_networks }}
 
 {{ docker_project_compose_additional_options }}
